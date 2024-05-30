@@ -1,30 +1,28 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <router-view :is="routerUrl" ></router-view>
+  </div>
+
 </template>
+<script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+import {ref} from 'vue';
 
-nav {
-  padding: 30px;
-}
+export default {
+  name: "layout",
+  components: {},
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  setup(){
 
-nav a.router-link-exact-active {
-  color: #42b983;
+    //TODO 这里只是v-is,并没有用其中的值
+    //通过修改routerUrl并保存登陆对象在sessionStonge中进行验证和跳转/*
+    const routerUrl = ref("home");
+
+    return {
+      routerUrl
+    };
+  }
 }
+</script>
+<style scoped>
 </style>
