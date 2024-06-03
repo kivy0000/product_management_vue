@@ -3,22 +3,14 @@ import HomeView from '../views/HomeView.vue'
 
 
 const routes = [
+
   {
-    path: '/',
+    //这里不注销掉，因为父子组件互相触发方法需要使用
+    // path: '/',
     name: 'home',
     component: HomeView,
-
   },
 
-  //view的另一种引用方式,函数式
-  //
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
 ]
 
 const router = createRouter({

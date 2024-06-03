@@ -4,7 +4,7 @@
     <el-container>
       <!--   一级容器头部   -->
       <el-header class="header_style">
-        <Header ref="headerRef"/>
+        <Header ref="headerRef"  @changeMain="changeMainVue"/>
       </el-header>
       <!--   二级容器   -->
       <el-container>

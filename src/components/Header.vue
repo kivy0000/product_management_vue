@@ -15,7 +15,7 @@
         </el-icon>
         {{ nowTime }}
       </el-button>
-      <el-button link class="header_button" @click="goBack" style="margin-right: 25px">
+      <el-button link class="header_button" @click="changeMainView('DefaultMain')" style="margin-right: 25px">
         <el-icon>
           <HomeFilled/>
         </el-icon>
@@ -93,10 +93,20 @@ import {ElNotification} from 'element-plus'
 export default {
   name: "Header",
   components: [],
-  setup() {
+  //事件触发数组
+  emits: [
+    'changeMain'
+  ],
+  setup(props, ctx) {
 
     //读取其他组件传的值
     const systemUser = inject('systemUser');
+
+
+    //使用事件触发父组件homeviewde的 @changeMain="changeMainVue" 方法，再调用main的changeModol方法
+    const changeMainView = (targetComponent, title) => {
+      ctx.emit('changeMain', targetComponent, title);
+    }
 
     //返回首页
     const goBack = () => {
@@ -192,12 +202,13 @@ export default {
 
     return {
       nowTime,
+      systemUser,
       goBack,
       elSout,
-      systemUser,
       elOpen,
       userMessage,
       userleave,
+      changeMainView,
     }
   }
 }

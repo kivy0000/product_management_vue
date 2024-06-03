@@ -25,7 +25,7 @@
       <!--  二级+三级路由写法  -->
       <!--      <router-view v-is="urlComponents"></router-view>-->
       <!--   组件写法   -->
-      <component name="childComponent" :is="urlComponents"></component>
+      <component  :is="urlComponents"></component>
     </div>
 
   </div>
@@ -68,11 +68,8 @@ export default {
 
     //返回上一页/组件
     const goBack = () => {
-      /*二级路由写法// router.push('/');// router.go(-1);*/
-      /*组件写法*/
-      urlComponents.value = 'DefaultMain';
-      mainDialog.value = false;
-      elSout("返回首页", 'success');
+      changeModol('DefaultMain');
+
     }
 
     //返回上一页选项是否显示，默认不显示
@@ -80,15 +77,19 @@ export default {
 
     //更改main的二级组件
     const changeModol = (targetComponent, newTitle) => {
-      /*
-     二级组件写法
-     * router.push(urlComponents.value);
-     */
       //组件写法
       if (targetComponent) {
         urlComponents.value = targetComponent;
+        //如果返回首页，直接返回，不显示标题栏目
+        if (targetComponent == 'DefaultMain'){
+          mainDialog.value = false;
+          elSout("返回首页", 'success');
+          return ;
+        }
+        //否则显示标题栏
         changePageTitle(newTitle);
       } else {
+        //未传递要跳转的组件名
         urlComponents.value = 'DefaultMain';
       }
       mainDialog.value = true;

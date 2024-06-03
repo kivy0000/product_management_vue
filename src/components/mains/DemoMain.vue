@@ -260,9 +260,10 @@ export default {
       drawerFormRef.value.validate(valid => {
         //前端校验通过,正常提交
         if (valid) {
+          console.log('提交信息为', drawerForm.value);
           //发送给后端数据
           request.post("/api/addProduct/", drawerForm.value).then(res => {
-            console.log('提交信息为', res);
+            console.log('返回信息为', res);
             //后端校验
             if (res.code == '400') {
               //后端校验失败,提示
@@ -355,7 +356,7 @@ export default {
         selectLoading.value = true;
         request.get("api/selectByTextAndPage/" + select_text.value, {
           params: {
-            pageNum: paginationItems.value.pageNum,
+            pageNum: paginationItems.value.pageNum = 1,
             pageSize: paginationItems.value.pageSize,
           }
         })
