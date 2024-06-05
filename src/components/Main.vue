@@ -86,8 +86,11 @@ export default {
           elSout("返回首页", 'success');
           return ;
         }
-        //否则显示标题栏
+        //否则显示标题栏,提示未开发界面
         changePageTitle(newTitle);
+        if(newTitle != '设备处理'){
+          elSout(newTitle + ' , 正在开发,暂时使用设备界面', 'info');
+        }
       } else {
         //未传递要跳转的组件名
         urlComponents.value = 'DefaultMain';

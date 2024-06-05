@@ -12,11 +12,11 @@
       <el-image class="logo-image" :src="require('@/assets/bird.jpg')"/>
 
       <!--  主标题-->
-      <el-text class="titleText" tag="b">REGISTRATION TEST INTERFACE</el-text>
+      <el-text class="titleText" tag="b">注册</el-text>
 
       <!-- 注册表单-->
       <div class="formStyle">
-        <el-form :model="form" label-width="80px" class="login-form" :rules="logrules">
+        <el-form :model="form" ref="formRef" label-width="80px" size="large" class="login-form" :rules="logrules">
 
           <el-form-item label="账号" prop="username">
             <el-input v-model="form.username" placeholder="请输入账号"></el-input>
@@ -37,7 +37,7 @@
             <el-input v-model="form.vcode" class="w-50 m-2" placeholder="验证码"
                       style="flex: 1"/>
             <el-button type="primary"
-                       size="default"
+                       size="large"
                        style="margin-left: 10px;flex: 1"
                        :loading="form.disabledButton"
                        @click="getVcode(this.form.email)">{{ form.registerText }}
@@ -45,9 +45,9 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" size="large" style="width: 320px;margin-bottom: 20px" @click="registerUser">注册
+            <el-button type="primary" size="large" :loading="registerLoading" style="width: 320px;margin-bottom: 20px" @click="registerUser">注册账号
             </el-button>
-            <el-link type="primary" @click="jumpComponent('LoginView')">返回登录</el-link>
+            <el-link type="primary"  @click="jumpComponent('LoginView')">返回登录</el-link>
           </el-form-item>
 
         </el-form>
@@ -65,6 +65,7 @@ import {ElMessage} from 'element-plus'
 //引入axios对象
 import request from "@/utils/request";
 import {useRouter, useRoute} from 'vue-router'
+import {ref} from 'vue';
 
 
 export default {
@@ -91,29 +92,41 @@ export default {
         this.open("请输入验证码", 'warning');
         return;
       }
-      var item = sessionStorage.getItem('expireTime');
-      //判断验证码是否正确,交给后端
-      request.post("/api/register/" + this.form.vcode + "/" + item, this.form).then(res => {
-            // console.log(res)
-            //判断是否注册成功
-            if (res.code === 200) {
-              this.open("注册成功，3秒后自动返回登陆页面", 'success', 3000,
-                  () => {
-                    //将注册表单数据转交到登陆页面
-                    localStorage.setItem('loginData', JSON.stringify(this.form));
-                    //注册完成使验证码失效,交给后端
-                    this.jumpRouter('/');
-                  }
-              );
-            } else if (res.code === 300) {
-              this.open("验证码已过期", 'warning')
-            } else if (res.code === 600) {
-              this.open("验证码错误", 'warning')
-            } else {
-              this.open("注册失败，请检查验证码", 'error')
+      //前端验证
+      this.$refs['formRef'].validate(
+          (valid) => {
+            //前端校验通过,正常提交
+            if (valid) {
+              //获取验证码有效期
+              var item = sessionStorage.getItem('expireTime');
+              //判断验证码是否正确,交给后端
+              request.post("/api/register/" + this.form.vcode + "/" + item, this.form).then(res => {
+                // console.log(res)
+                //判断是否注册成功
+                if (res.code === 200) {
+                  this.open("注册成功，3秒后自动返回登陆页面", 'success', 3000,
+                      () => {
+                        //将注册表单数据转交到登陆页面
+                        localStorage.setItem('loginData', JSON.stringify(this.form));
+                        //注册完成使验证码失效,交给后端
+                        this. jumpComponent('LoginView');
+                      }
+                  );
+                } else if (res.code === 300) {
+                  this.open("验证码已过期", 'warning')
+                } else if (res.code === 600) {
+                  this.open("验证码错误", 'warning')
+                } else {
+                  this.open("注册失败，请检查验证码", 'error')
+                }
+              })
+            }else {
+              this.open("校验不通过，请检查", 'warning');
+              return false;
             }
-          }
-      )
+
+          })
+
 
 
     },
@@ -198,6 +211,7 @@ export default {
       ctx.emit('changeRouterUrl', targetComponent);
     }
 
+    ///表单
     const form = reactive({
       username: '',
       password: '',
@@ -235,10 +249,14 @@ export default {
 
     })
 
+    //注册按钮加载动画
+    const registerLoading = ref(false);
+
     return {
       form,
       logrules,
       jumpComponent,
+      registerLoading,
     };
   },
 };
@@ -267,7 +285,7 @@ export default {
 
 .login-card {
   z-index: 1;
-  height: 550px;
+  height: 580px;
   width: 430px;
   padding: 15px;
   text-align: center;

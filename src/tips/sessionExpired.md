@@ -1,5 +1,6 @@
 <h1>session提示</h1>
 <h2>注意：sessionStorage只有在前端组件中可以获取，后端无法获取，仅适用于低安全性数据交互</h2>
+//这里放入和取出时，都会失去json格式，因此放入时直接放入对象，取出时进行jason转换
 <h3>数据的验证流程：前端首先将withCredentials: true，后端使用sessionId+redis统一保存/获取数据，与前端url携带的参数进行校验</h3>
 
 
@@ -26,10 +27,10 @@ const userData = JSON.parse(sessionStorage.getItem('userData'));
 const expireTime = sessionStorage.getItem('expireTime');
 if (new Date().getTime() > parseInt(expireTime)) {
   // 数据已过期
-  console.log('Data has expired');
+  console.log('数据已过期');
 } else {
   // 数据未过期
-  console.log(userData);
+  console.log('数据未过期',userData);
 }
 ```
 

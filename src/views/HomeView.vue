@@ -4,7 +4,7 @@
     <el-container>
       <!--   一级容器头部   -->
       <el-header class="header_style">
-        <Header ref="headerRef"  @changeMain="changeMainVue"/>
+        <Header ref="headerRef" @changeMain="changeMainVue"/>
       </el-header>
       <!--   二级容器   -->
       <el-container>
@@ -47,7 +47,31 @@ export default {
     Main,
     Foot,
   },
-  setup() {
+  //事件触发数组
+  emits: [
+    'changeRouterUrl'
+  ],
+
+  created() {
+    //这里放入和取出时，都会失去json格式，放入时直接放入对象，取出时进行jason转换
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    const expireTime = JSON.parse(sessionStorage.getItem("expireTime"));
+    if (userData === null|| expireTime === null){
+      this.jumpComponent('LoginView');
+      return ;
+    }
+    if (new Date().getTime() > parseInt(expireTime)) {
+      // 数据已过期
+      alert("数据超时，请重新登录");
+      sessionStorage.clear();
+      this.jumpComponent('LoginView');
+    } else {
+      // 数据未过期
+      this.systemUser = userData;
+    }
+    //--------------------------
+  },
+  setup(props, ctx) {
     //方便父子组件来回调用方法，使用这四个引用子组件
     const headerRef = ref(null);
     const asideRef = ref(null);
@@ -57,16 +81,16 @@ export default {
 
     //更改主页组件
     const changeMainVue = (vueName, newTitle) => {
-      console.log('父组件homeview得到事件：@' + vueName)
+      // console.log('父组件homeview得到事件：@' + vueName)
       mainRef.value.changeModol(vueName, newTitle);
+    }
+    //使用事件触发父组件app的 @changeMain="changeRouterUrl" 方法//跳转组件
+    const jumpComponent = (targetComponent) => {
+      ctx.emit('changeRouterUrl', targetComponent);
     }
 
     //用户信息
-    const systemUser = ref({
-      username: 'ikun',
-      email: '666666@qq.com',
-      pnumber: '1555555555',
-    });
+    const systemUser = ref();
 
     //向其他组件共享用户信息
     provide('systemUser', systemUser);
@@ -78,6 +102,7 @@ export default {
       footRef,
       changeMainVue,
       systemUser,
+      jumpComponent,
     }
   }
 }

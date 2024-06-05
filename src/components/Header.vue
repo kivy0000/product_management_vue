@@ -2,45 +2,44 @@
   <div class="header_title-style">
 
     <div class="header_second_title-style">
-      <el-icon :size="26">
+      <el-icon :size="18">
         <Platform/>
       </el-icon>
       Product lifecycle management system
     </div>
-    <div style="padding-right: 30px">
-      <el-button link class="header_button" @click="elOpen('北京时间' ,nowTime,'success')"
-                 style="margin-right: 25px">
+    <div style="padding-right: 10px">
+      <el-button link class="header_button" @click="elOpen('北京时间' ,nowTime,'success')" style="padding-right: 15px">
         <el-icon style="margin-right: 5px">
           <Watch />
         </el-icon>
         {{ nowTime }}
       </el-button>
-      <el-button link class="header_button" @click="changeMainView('DefaultMain')" style="margin-right: 25px">
+      <el-button link class="header_button" @click="changeMainView('DefaultMain')" style="padding-right: 15px">
         <el-icon>
           <HomeFilled/>
         </el-icon>
         首页
       </el-button>
-      <el-button link class="header_button" @click="elSout('拒绝协同')" style="margin-right: 25px">
+      <el-button link class="header_button" @click="elSout('协同,正在开发')" style="padding-right: 15px">
         <el-icon>
           <Avatar/>
         </el-icon>
         协同
       </el-button>
-      <el-button link class="header_button" @click="elSout('拒绝调整')" style="margin-right: 25px">
+      <el-button link class="header_button" @click="elSout('调整,正在开发')" style="padding-right: 15px">
 
         <el-icon>
           <TrendCharts/>
         </el-icon>
         调整
       </el-button>
-      <el-button link class="header_button" @click="elSout('订单拒绝')" style="margin-right: 25px">
+      <el-button link class="header_button" @click="elSout('订单,正在开发')" style="padding-right: 15px">
         <el-icon>
           <List/>
         </el-icon>
         订单
       </el-button>
-      <el-button link class="header_button" @click="elSout('其他拒绝')" style="margin-right: 25px">
+      <el-button link class="header_button" @click="elSout('其他内容,正在开发')" style="padding-right: 15px">
         <el-icon>
           <Grid/>
         </el-icon>
@@ -49,7 +48,7 @@
 
 
     </div>
-    <div style="padding-right: 10px;">
+    <div style="padding-left: 25px;">
       <!--   登录后   -->
       <el-dropdown v-if="systemUser!=null"> <!--  systemUser：使用验证参数，应放在homeview里面，使用inject和provide进行全局调用  -->
         <el-button type="info" style="width: 100px;margin-top: 20px;font-size: small;background-color: #424f63;">
@@ -136,6 +135,8 @@ export default {
             elOpen('退出登录', systemUser.value.username + '  已退出登录', 'warning');
             systemUser.value = null;
             //跳转回登录/注册界面
+            sessionStorage.clear();
+            router.go(0);
           }
       )
           .catch(
@@ -243,7 +244,7 @@ export default {
   font-weight: bold;
   color: #545c64;
   font-family: 'Microsoft YaHei UI';
-  font-size: 25px;
+  font-size: 18px;
 }
 
 * el-icon {

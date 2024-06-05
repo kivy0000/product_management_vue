@@ -177,6 +177,9 @@ export default {
     //搜索关键字
     const select_text = ref('');
 
+    //临时搜索关键字,用于重置页码
+    const select_text_demo = ref('');
+
     //搜索画面
     const selectLoading = ref(false);
 
@@ -200,7 +203,7 @@ export default {
     const rules = ref({
       name: [
         {required: true, message: 'Please input Activity name', trigger: 'blur'},
-        {min: 3, max: 8, message: 'Length should be 3 to 8', trigger: 'blur'},
+        {min: 3, max: 16, message: 'Length should be 3 to 16', trigger: 'blur'},
       ],
       productId: [
         {required: true, message: '请输入产品代码', trigger: 'blur'},
@@ -352,11 +355,18 @@ export default {
     const flashTableData = () => {
       //如果有搜索关键字，进入关键字搜索分页/selectByTextAndPage
       if (select_text.value != null && select_text.value != '') {
-        //有关键词，进入搜索
+        //关键词和临时搜索关键词判断
+        if (select_text_demo.value != null && select_text_demo.value != '' && select_text_demo.value != select_text.value) {
+          //不是第一次搜索,页码置为1
+          paginationItems.value.pageNum = 1;
+        }
+        //第一次搜索,保存关键字
+        select_text_demo.value = select_text.value
+
         selectLoading.value = true;
         request.get("api/selectByTextAndPage/" + select_text.value, {
           params: {
-            pageNum: paginationItems.value.pageNum = 1,
+            pageNum: paginationItems.value.pageNum,
             pageSize: paginationItems.value.pageSize,
           }
         })
@@ -368,7 +378,7 @@ export default {
                 tableData.value = res.data.records;
                 //获取总页数
                 paginationItems.value.total = res.data.total;
-                console.log( tableData.value);
+                console.log(tableData.value);
               }
               selectLoading.value = false;
             })
@@ -468,7 +478,8 @@ export default {
      * 单行导出
      * */
     const exportRow = (row) => {
-      console.log("导出数据：", row);
+      elSout("导出数据完成", 'success');
+      // console.log("导出数据：", row);
     }
 
     /**
@@ -479,7 +490,7 @@ export default {
         elSout('请选择要导出的项', 'warning');
         return;
       }
-      console.log("批量导出数据：", selectionTableData.value);
+      elSout("批量导出数据完成", 'success');
     };
 
     /**
@@ -488,7 +499,7 @@ export default {
      */
     const handleSelectionChange = (selection) => {
       selectionTableData.value = selection;
-      console.log("当前选中的行", selectionTableData.value);
+      // console.log("当前选中的行", selectionTableData.value);
     }
 
     //退出弹窗的提示
@@ -556,6 +567,7 @@ export default {
       selectionTableData,
       drawerForm,
       select_text,
+      select_text_demo,
       selectLoading,
       drawer,
       rules,

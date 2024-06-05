@@ -23,10 +23,9 @@ export default {
   setup(){
 
 
-    //todo 使用provide添加一个对象，包含登录用户，token时间等等，先保存到session，然后再全局共享
 
     //通过修改routerUrl并保存登陆对象在sessionStonge中进行验证和跳转/*
-    const routerUrl = ref("LoginView");
+    const routerUrl = ref("HomeView");
 
     //方便父子组件来回调用方法，使用这引用子组件
     const chirdRef = ref(null);

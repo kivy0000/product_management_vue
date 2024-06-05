@@ -9,10 +9,10 @@
     </div>
 
     <!--  忘记密码弹窗-->
-    <el-dialog style="width: 330px;height: 460px" title="找回密码" v-model="this.logform.dialogVisible">
+    <el-dialog style="width: 430px;height: 560px" title="找回密码" v-model="this.logform.dialogVisible">
 
       <!--   重置密码表单   -->
-      <el-form :model="reform" label-width="80px" class="login-form" :rules="logrules">
+      <el-form :model="reform" size="large" label-width="90px" class="login-form" :rules="logrules">
 
         <el-form-item label="账 号" prop="username">
           <el-input v-model="reform.username" placeholder="请输入账号"></el-input>
@@ -27,11 +27,11 @@
         </el-form-item>
 
         <!-- 手机号和验证码-->
-        <el-form-item label="验证码" prop="vcode">
-          <el-input v-model="reform.vcode" class="vcodeclass" placeholder="验证码" style="width: 115px"/>&nbsp;&nbsp;&nbsp;&nbsp;
+        <el-form-item label="验证码" prop="vcode" style="display: flex">
+          <el-input v-model="reform.vcode" class="vcodeclass" placeholder="验证码" style="flex: 1"/>&nbsp;&nbsp;&nbsp;&nbsp;
           <el-button type="primary"
-                     size="default"
-                     style="width: 75px"
+                     size="large"
+                     style="flex: 1"
                      :disabled="reform.disabledButton" @click="getVcode(this.reform.email)">{{ reform.registerText }}
           </el-button>
         </el-form-item>
@@ -50,11 +50,11 @@
       <el-image class="logo-image" :src="require('@/assets/bird.jpg')"/>
 
       <!--   主标题   -->
-      <el-text class="titleText" tag="b">LOGIN TEST INTERFACE</el-text>
+      <el-text class="titleText" tag="b">登录</el-text>
 
       <!-- 登陆表单     -->
       <div class="formStyle">
-        <el-form :model="form" label-width="80px" :rules="logrules" class="login-form">
+        <el-form :model="form" ref="formRef" label-width="80px" size="large" :rules="logrules" class="login-form">
 
           <!--   使用 prop指定校验规则       -->
           <el-form-item label="账 号" prop="username">
@@ -65,13 +65,14 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" style="width: 280px;margin: auto" size="large"
+            <el-button type="primary" style="width: 280px;margin: auto" size="large" :loading="loginLoading"
                        :disabled="this.form.disabledButton" @click="userLogin">登录
             </el-button>
 
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width: 280px;margin: auto" size="large" @click="jumpComponent('RegisterView')">
+            <el-button type="primary" style="width: 280px;margin: auto" size="large"
+                       @click="jumpComponent('RegisterView')">
               注册
             </el-button>
           </el-form-item>
@@ -119,8 +120,6 @@ export default {
     }
   },/*// 初始化钩子函数，不在method里面*/
   methods: {
-
-
     //打开忘记密码表单
     userForget() {
       this.logform.dialogVisible = true;
@@ -214,15 +213,16 @@ export default {
         // console.log(res)
         //判断是否重置成功
         if (res.code === 200) {
-          this.open("重置密码成功", 'success', 3000,
-              () => {
-                //注册完成使验证码失效
-                this.reform.icode = '';
-                //关闭页面
-                this.logform.dialogVisible = false;
-
-              }
-          );
+          this.open("重置密码成功", 'success', 3000);
+          //辅助填写登陆页面
+          this.form.username = this.reform.username;
+          this.form.password = this.reform.password;
+          this.reform.username = '';
+          this.reform.password = '';
+          this.reform.email = '';
+          this.reform.vcode = '';
+          //关闭页面
+          this.logform.dialogVisible = false;
         } else if (res.code === 300) {
           this.open("验证码已过期", 'warning')
         } else if (res.code === 600) {
@@ -267,30 +267,48 @@ export default {
      * 登陆方法
      */
     userLogin() {
-      this.form.disabledButton = true;
+      this.loginLoading = true;
       //账号密码未填充
       if (!(this.form.username != '' && this.form.username != null
           && this.form.password != '' && this.form.password != null)) {
         this.open("请输入账号/密码", 'warning');
-        this.form.disabledButton = false;
+        this.loginLoading = false;
         return;
       }
-
-      //登陆逻辑实际验证
-      request.post("/api/login", this.form).then(res => {
-            if (res.code === 200) {
-              //跳转,userdata和expiretime已经在session中
+      //前端验证
+      this.$refs['formRef'].validate(
+          (valid) => {
+            //前端校验通过,正常提交
+            if (valid) {
+              //登陆逻辑实际验证
+              request.post("/api/login", this.form).then(res => {
+                // console.log('res=', res);
+                if (res.code === 200) {
+                  //登陆成功,expiredata(user)和expiretime放入session中
+                  const expireData = res.expireUser;
+                  const expireTime = res.expireTime;
+                  //这里放入和取出时，都会失去json格式，放入时直接放入对象，取出时进行jason转换
+                  sessionStorage.setItem("userData", expireData);
+                  sessionStorage.setItem("expireTime", expireTime);
+                  //跳转,提示
+                  this.jumpComponent('HomeView');
+                }
+                this.notiOpen(res.text, res.vcode, this.form.username);
+              })
+              this.loginLoading = false;
+            } else {
+              this.open("校验不通过，请检查", 'warning');
+              this.loginLoading = false;
+              return false;
             }
-            //提示信息
-            this.notiOpen(res.text, res.vcode, this.form.username);
 
-          }
-      )
-      this.form.disabledButton = false;
+          })
     }
+
+
   },
+
   setup(props, ctx) {
-    //也可以在script中直接添加表单
     //登陆表单
     const form = reactive({
       username: '',
@@ -302,6 +320,12 @@ export default {
       registerTime: 0, //获取验证码倒计时
       icode: '',//服务端获取的验证码
     });
+
+    //表单验证链接
+    const formRef = ref();
+
+    //登录按钮加载动画
+    const loginLoading = ref(false);
 
     //重置密码用的表单
     const reform = reactive({
@@ -354,7 +378,7 @@ export default {
     }
 
     return {
-      form, reform, logform, resetlock, logrules,jumpComponent,
+      form, reform, logform, resetlock, logrules, jumpComponent, loginLoading,
     };
   },
 };
@@ -374,7 +398,7 @@ export default {
 /*登录卡片*/
 .login-card {
   z-index: 1;
-  height: 550px;
+  height: 580px;
   width: 430px;
   padding: 15px;
   text-align: center;
@@ -399,13 +423,11 @@ export default {
 
 /*登陆表单*/
 .login-form {
-
   label-width: 80px;
   margin-top: 30px;
   margin-right: 30px;
   margin-left: -30px;
   font-size: 50px
-
 
 }
 
