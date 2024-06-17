@@ -14,7 +14,6 @@
             <Aside ref="asideRef" @changeMain="changeMainVue"/>
           </el-aside>
           <el-main class="main_style">
-            <!--二级+三级路由写法 <router-view></router-view>-->
             <Main ref="mainRef"></Main>
           </el-main>
         </el-container>

@@ -5,7 +5,7 @@ import HomeView from '../views/HomeView.vue'
 const routes = [
 
   {
-    //这里不注销掉，因为父子组件互相触发方法需要使用
+    //这里不注销掉，因为router组件需要有一个默认的 path: '/'
     // path: '/',
     name: 'home',
     component: HomeView,

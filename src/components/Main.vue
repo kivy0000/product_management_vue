@@ -113,7 +113,7 @@ export default {
     }
 
     //等于this.$Router
-    var router = useRouter();
+    const router = useRouter();
 
     return {
       urlComponents,
