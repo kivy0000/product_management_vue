@@ -354,15 +354,14 @@ export default {
     //刷新数据表数组tableData,flashTableData()带方法括号
     const flashTableData = () => {
       //如果有搜索关键字，进入关键字搜索分页/selectByTextAndPage
-      if (select_text.value != null && select_text.value != '') {
+      if (select_text.value != null && select_text.value !== '') {
         //关键词和临时搜索关键词判断
-        if (select_text_demo.value != null && select_text_demo.value != '' && select_text_demo.value != select_text.value) {
-          //不是第一次搜索,页码置为1
+        if (select_text_demo.value != null  && select_text_demo.value !== select_text.value) {
+          //第一次搜索,页码置为1,保存关键字
           paginationItems.value.pageNum = 1;
+          select_text_demo.value = select_text.value;
         }
-        //第一次搜索,保存关键字
-        select_text_demo.value = select_text.value
-
+        //不是第一次搜索
         selectLoading.value = true;
         request.get("api/selectByTextAndPage/" + select_text.value, {
           params: {
