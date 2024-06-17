@@ -10,7 +10,7 @@ module.exports = {
 
     proxy: { //拦截器,本地项目仍需使用,如使用docker，可以使用nginx代替
       '/api': {
-        target: "http://36.138.22.19:9090/",//
+        target: "http://localhost:9090/",//
         changeOrigin: true,//允许跨源
         pathRewrite: {
           '/api': ''
