@@ -93,7 +93,7 @@ import {reactive} from 'vue';
 import {ElMessage} from 'element-plus'
 import {ElNotification} from 'element-plus'
 import {useRouter, useRoute} from 'vue-router'
-//引入axios对象
+//引入axios对象,
 import request from "@/utils/request";
 import {ref} from 'vue';
 
@@ -391,7 +391,7 @@ export default {
   display: flex;
   justify-content: center; /*靠右*/
   align-items: center; /* 靠上*/
-  height: 90vh;
+  height: 100vh;
   opacity: 0.88; /*透明度*/
 }
 
@@ -417,12 +417,11 @@ export default {
 /*忘记密码*/
 .el-link {
   margin-top: -10px;
-  /*margin-right: 4px;*/
-  /*font-size: 12px;*/
 }
 
 /*登陆表单*/
 .login-form {
+  flex: 1;
   label-width: 80px;
   margin-top: 30px;
   margin-right: 30px;
@@ -443,8 +442,7 @@ export default {
 /*背景图*/
 .imgeBack {
   position: fixed;
-  width: 1920px;
-  height: 1080px;
+  flex: 1;
   z-index: 0;
 }
 

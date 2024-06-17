@@ -51,6 +51,44 @@ export default {
   emits: [
     'changeRouterUrl'
   ],
+  activated() {
+    //加载组件前验证是否过期,触发时机：keep-alive组件激活时使用；
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    const expireTime = JSON.parse(sessionStorage.getItem("expireTime"));
+    if (userData === null|| expireTime === null){
+      this.jumpComponent('LoginView');
+      return ;
+    }
+    if (new Date().getTime() > parseInt(expireTime)) {
+      // 数据已过期
+      alert("数据超时，请重新登录");
+      sessionStorage.clear();
+      this.jumpComponent('LoginView');
+    } else {
+      // 数据未过期
+      this.systemUser = userData;
+    }
+
+  },
+  deactivated() {
+    //加载组件前验证是否过期,触发时机：keep-alive组件停用时调用；
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    const expireTime = JSON.parse(sessionStorage.getItem("expireTime"));
+    if (userData === null|| expireTime === null){
+      this.jumpComponent('LoginView');
+      return ;
+    }
+    if (new Date().getTime() > parseInt(expireTime)) {
+      // 数据已过期
+      alert("数据超时，请重新登录");
+      sessionStorage.clear();
+      this.jumpComponent('LoginView');
+    } else {
+      // 数据未过期
+      this.systemUser = userData;
+    }
+  },
+
 
   created() {
     //这里放入和取出时，都会失去json格式，放入时直接放入对象，取出时进行jason转换

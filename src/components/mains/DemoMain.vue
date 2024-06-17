@@ -95,7 +95,7 @@
     <el-main>
       <div>
         <!--   没有数据时，会显示为加载中动画-->
-        <el-table :data="tableData" border class="table_style" height="620px"
+        <el-table :data="tableData" border class="table_style" height="620px" min-wdith="1560px"
                   @selection-change="handleSelectionChange" v-loading="tableData.length<=0"
                   element-loading-text="数据加载中，请稍候..." stripe :row-style="{ height: '58px' }">
           <el-table-column type="selection" width="35px"/>
