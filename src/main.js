@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+//todo 你需要确实是否全部引入，如未引入，鼠标放置在黄色波浪线上，点击引入
+
 //引入elementPlus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'

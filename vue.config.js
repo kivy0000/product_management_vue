@@ -2,22 +2,23 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true
 })
+//todo 你需要确认这里的配置
 //解决跨域问题
 module.exports = {
   devServer: {
-    port: 8989, //前端启动端口,basic functions have been implemented
+    port: 8989, //前端启动端口
 
-    // proxy: { //拦截器,已经使用nginx代替,但本地项目仍需使用
-    //   '/api': {
-    //     target: "http://36.138.22.19:9090/",//
-    //     changeOrigin: true,//允许跨源
-    //     pathRewrite: {
-    //       '/api': ''
-    //     }
-    //   }
-    // },
+    proxy: { //拦截器,本地项目仍需使用,如使用docker，可以使用nginx代替
+      '/api': {
+        target: "http://localhost:9090/",//
+        changeOrigin: true,//允许跨源
+        pathRewrite: {
+          '/api': ''
+        }
+      }
+    },
     client: {
-      //  解决页面弹出红色报错遮罩层,将overlay设置为false即可
+      //  解决页面弹出红色报错遮罩层,将overlay设置为false
       overlay: false
     },
   },
