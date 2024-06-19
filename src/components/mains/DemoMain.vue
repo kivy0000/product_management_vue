@@ -268,13 +268,13 @@ export default {
           request.post("/api/addProduct/", drawerForm.value).then(res => {
             console.log('返回信息为', res);
             //后端校验
-            if (res.code == '400') {
+            if (res.code === '400') {
               //后端校验失败,提示
-              elSout("后端校验失败", res.msg);
+              elSout("校验失败,请检查信息", 'warning');
               console.log(res.data);
             } else {
               //后端校验成功
-              elSout(res.code == '200' ? "添加成功" : "添加失败", res.msg);
+              elSout(res.code === '200' ? "添加成功" : "添加失败", res.msg);
             }
             //刷新数据
             flashTableData();
