@@ -198,6 +198,8 @@ export default {
       );
     },
 
+
+
     /**重置密码的方法*/
     resetPassword() {
       if (this.reform.username === '' || this.reform.password === '') {
@@ -320,6 +322,7 @@ export default {
       registerTime: 0, //获取验证码倒计时
       icode: '',//服务端获取的验证码
     });
+
 
     //表单验证链接
     const formRef = ref();

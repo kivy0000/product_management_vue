@@ -8,15 +8,15 @@ module.exports = {
   devServer: {
     port: 8989, //前端启动端口
 
-    proxy: { //拦截器,本地项目仍需使用,如使用docker，可以使用nginx代替
-      '/api': {
-        target: "http://localhost:9090/",//
-        changeOrigin: true,//允许跨源
-        pathRewrite: {
-          '/api': ''
-        }
-      }
-    },
+    // proxy: { //拦截器,本地项目仍需使用,如使用docker，可以使用nginx代替
+    //   '/api': {
+    //     target: "http://localhost:9090/",//
+    //     changeOrigin: true,//允许跨源
+    //     pathRewrite: {
+    //       '/api': ''
+    //     }
+    //   }
+    // },
     client: {
       //  解决页面弹出红色报错遮罩层,将overlay设置为false
       overlay: false

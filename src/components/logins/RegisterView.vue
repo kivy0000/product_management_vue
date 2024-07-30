@@ -99,7 +99,7 @@ export default {
             if (valid) {
               //获取验证码有效期
               var item = sessionStorage.getItem('expireTime');
-              //判断验证码是否正确,交给后端
+              //后端校验
               request.post("/api/register/" + this.form.vcode + "/" + item, this.form).then(res => {
                 // console.log(res)
                 //判断是否注册成功

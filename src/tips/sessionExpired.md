@@ -1,7 +1,10 @@
 <h1>session提示</h1>
-<h2>注意：sessionStorage只有在前端组件中可以获取，后端无法获取，仅适用于低安全性数据交互</h2>
-//这里放入和取出时，都会失去json格式，因此放入时直接放入对象，取出时进行jason转换
-<h3>数据的验证流程：前端首先将withCredentials: true，后端使用sessionId+redis统一保存/获取数据，与前端url携带的参数进行校验</h3>
+<h2>sessionStorage 、localStorage、cookie</h2>
+<h3>注意：1. 这三个仅适用于低安全性数据交互,会储存在本地客户端，放入时，value应使用JSON.stringify转换为json字符串
+            取出时，使用JSON.parse转换为json对象
+         2.cookie可以设置过期时间，但只能设置4kb数据
+         3. request.js 设置withCredentials: true后，后端可以读取到sessionStorage的数据，这是因为允许了cookie携带session数据
+</h3>
 
 
 
