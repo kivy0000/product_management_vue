@@ -32,7 +32,7 @@
           <el-button type="primary"
                      size="large"
                      style="flex: 1"
-                     :disabled="reform.disabledButton" @click="getVcode(this.reform.email)">{{ reform.registerText }}
+                     :disabled="reform.disabledButton" @click="getVcode()">{{ reform.registerText }}
           </el-button>
         </el-form-item>
 
@@ -140,7 +140,7 @@ export default {
     },
 
     /**重置获取验证码的方法*/
-    getVcode(vemail) {
+    getVcode() {
       this.reform.disabledButton = true;
       var demo = 400;
       if (this.reform.username === '' || this.reform.username === null || this.reform.email === '' || this.reform.email === null) {
@@ -160,7 +160,7 @@ export default {
               //验证码不应使用明文,使用sessionid+redis验证，在重置方法中进行验证
               //设置过期时间，两分钟
               const expireTime = new Date().getTime() + 120 * 1000;
-              sessionStorage.setItem('expireTime', expireTime);
+              sessionStorage.setItem('expireTime', expireTime.toString());
             } else if (demo === 300) {
               this.open("该账号未注册，请注册", 'warning');
             } else if (demo === 500) {
@@ -239,8 +239,9 @@ export default {
 
     //侧面弹窗方法
     /**
-     * @param str 提示信息
+     * @param titles
      * @param type 提示类型 success、warning等
+     * @param username
      */
     notiOpen(titles, type, username) {
       if (type === 'success') {
@@ -271,8 +272,8 @@ export default {
     userLogin() {
       this.loginLoading = true;
       //账号密码未填充
-      if (!(this.form.username != '' && this.form.username != null
-          && this.form.password != '' && this.form.password != null)) {
+      if (!(this.form.username !== '' && this.form.username != null
+          && this.form.password !== '' && this.form.password != null)) {
         this.open("请输入账号/密码", 'warning');
         this.loginLoading = false;
         return;
