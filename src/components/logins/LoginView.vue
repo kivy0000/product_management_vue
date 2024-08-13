@@ -401,8 +401,8 @@ export default {
 /*登录卡片*/
 .login-card {
   z-index: 1;
-  height: 580px;
-  width: 430px;
+  height: 600px;
+  width: 440px;
   padding: 15px;
   text-align: center;
 }
