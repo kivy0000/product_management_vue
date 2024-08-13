@@ -68,7 +68,8 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button v-if=" drawerFormTitles.msg == '添加'" type="primary" :loading="loading" @click="addProduct()">
+                <el-button v-if=" drawerFormTitles.msg == '添加'" type="primary" :loading="loading"
+                           @click="addProduct()">
                   {{ drawerFormTitles.msg }}
                 </el-button>
                 <el-button v-else=" drawerFormTitles.msg == '添加'" type="primary" :loading="loading"
@@ -110,8 +111,9 @@
           <el-table-column label="操作" align="center">
             <template #default="scope">
 
-              <el-button @click="handleEdit(scope.row);drawerFormTitles.title = '修改数据';drawerFormTitles.msg = '提交修改'"
-                         link>
+              <el-button
+                  @click="handleEdit(scope.row);drawerFormTitles.title = '修改数据';drawerFormTitles.msg = '提交修改'"
+                  link>
                 编辑
               </el-button>
               <!--        TODO excel表格操作      -->
@@ -265,7 +267,7 @@ export default {
         if (valid) {
           console.log('提交信息为', drawerForm.value);
           //发送给后端数据
-          request.post("/api/addProduct/", drawerForm.value).then(res => {
+          request.post("/api/addProduct/", JSON.stringify(drawerForm.value)).then(res => {
             console.log('返回信息为', res);
             //后端校验
             if (res.code === '400') {
@@ -356,7 +358,7 @@ export default {
       //如果有搜索关键字，进入关键字搜索分页/selectByTextAndPage
       if (select_text.value != null && select_text.value !== '') {
         //关键词和临时搜索关键词判断
-        if (select_text_demo.value != null  && select_text_demo.value !== select_text.value) {
+        if (select_text_demo.value != null && select_text_demo.value !== select_text.value) {
           //第一次搜索,页码置为1,保存关键字
           paginationItems.value.pageNum = 1;
           select_text_demo.value = select_text.value;

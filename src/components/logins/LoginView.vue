@@ -436,7 +436,7 @@ export default {
 /*logo*/
 .logo-image {
   width: 140px;
-  height: 60px;
+  height: 80px;
   margin: auto; /* 居中显示 */
   justify-content: center; /* 居中对齐 */
   opacity: 0.7;

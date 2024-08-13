@@ -279,7 +279,7 @@ export default {
   display: flex;
   justify-content: center; /*靠右*/
   align-items: center; /* 靠上*/
-  height: 90vh;
+  height: 100vh;
   opacity: 0.88; /*透明度*/
 }
 
@@ -302,14 +302,13 @@ export default {
 
 .imgeBack {
   position: fixed;
-  width: 1920px;
-  height: 1080px;
+  flex: 1;
   z-index: 0;
 }
 
 .logo-image {
   width: 140px;
-  height: 60px;
+  height: 80px;
   margin: auto; /* 居中显示 */
   justify-content: center; /* 居中对齐 */
   opacity: 0.7;
